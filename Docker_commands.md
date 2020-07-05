@@ -155,7 +155,22 @@ root@ip-172-31-22-94:/home/ubuntu# docker exec -it ed73188099fa /bin/bash
 root@ed73188099fa:/# 
 ```
 
+### Stop/Start Docker container
+```
+root@ip-172-31-22-94:/home/ubuntu# docker stop ed73188099fa
+ed73188099fa
 
+root@ip-172-31-22-94:/home/ubuntu# docker container ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                     PORTS               NAMES
+ed73188099fa        ubuntu              "/bin/bash"         2 hours ago         Exited (0) 3 seconds ago                       laughing_moser
+
+root@ip-172-31-22-94:/home/ubuntu# docker start ed73188099fa
+ed73188099fa
+
+root@ip-172-31-22-94:/home/ubuntu# docker container ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+ed73188099fa        ubuntu              "/bin/bash"         2 hours ago         Up 3 seconds                            laughing_moser
+```
 
 
 
