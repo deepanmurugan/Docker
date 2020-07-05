@@ -396,8 +396,41 @@ drwx------ 2 root root 4096 Jul  5 05:17 tmpdiq0swnv
 -rw-r--r-- 1 root root   12 Jul  5 14:18 myfile.txt
 ```
 
+### Docker container restart based on a condition
+```
+root@ip-172-31-22-94:/tmp# docker run --restart=always -it ubuntu
 
+root@ip-172-31-22-94:/tmp# docker run --restart=always -it ubuntu
 
+root@33dd1f81d631:/# exit
+exit
+
+root@ip-172-31-22-94:/tmp# docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+33dd1f81d631        ubuntu              "/bin/bash"         12 seconds ago      Up 1 second                             pedantic_taussig
+693e088601b4        ubuntu              "/bin/bash"         11 minutes ago      Up 11 minutes                           ubuntu1804
+
+NOTE: The docker container 33dd1f81d631 exited when using exit command and restarted again as we mentioned restart=always parameter.
+```
+
+### Remove all stopped docker container
+```
+root@ip-172-31-22-94:/tmp# docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED              STATUS                     PORTS               NAMES
+33dd1f81d631        ubuntu              "/bin/bash"         About a minute ago   Exited (0) 5 seconds ago                       pedantic_taussig
+693e088601b4        ubuntu              "/bin/bash"         13 minutes ago       Exited (0) 5 seconds ago                       ubuntu1804
+
+root@ip-172-31-22-94:/tmp# docker container prune
+WARNING! This will remove all stopped containers.
+Are you sure you want to continue? [y/N] y
+Deleted Containers:
+33dd1f81d6314577bb04e7e6f7d125a5c6b5e772f43663c972c10094e6327fc5
+693e088601b4ee7d2dd22ffb61cdd533a60661dbf54d28f9326d07704780359b
+Total reclaimed space: 41B
+
+root@ip-172-31-22-94:/tmp# docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+```
 
 
 
