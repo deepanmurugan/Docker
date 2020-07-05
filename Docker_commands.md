@@ -133,8 +133,27 @@ drwx------ 4 root root 4096 Jul  5 05:31 ffc8fdd66a9111faa0fed9824ca5eff88e2553d
 drwx------ 4 root root 4096 Jul  5 05:31 aab67b11eb2f029483cfe061da2102566c6c0a97e052ade124b1907853145db8
 ```
 
+### Run a docker image
+```
+root@ip-172-31-22-94:/var/lib/docker/overlay2# docker run -itd ubuntu
+ed73188099fa7e8d5208bb47cb07e0c3af1c541f6d5652c8d1b56d0adf431b50
 
+-i interactive mode
+-t putty terminal
+-d run as a daemon
 
+root@ip-172-31-22-94:/var/lib/docker/overlay2# docker container ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+ed73188099fa        ubuntu              "/bin/bash"         8 seconds ago       Up 7 seconds                            laughing_moser
+
+NOTE: NAMES is randomly picked by docker itself. When you don't provide any names docker will pickup random ones.
+```
+
+### To Go inside a container
+```
+root@ip-172-31-22-94:/home/ubuntu# docker exec -it ed73188099fa /bin/bash
+root@ed73188099fa:/# 
+```
 
 
 
