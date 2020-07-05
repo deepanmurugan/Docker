@@ -279,7 +279,7 @@ ed73188099fa        ubuntu              "/bin/bash"         3 hours ago         
 
 ### Provide custom name while launching a container
 ```
-root@ip-172-31-22-94:/home/ubuntu# docker run -itd --name dockerubuntu ubuntu /bin/bash
+root@ip-172-31-22-94:/home/ubuntu# docker run --name dockerubuntu -itd ubuntu /bin/bash
 daa184117390fc0de5e5a1f1402e9103f1a6f8f85324f0ef38a1f544a8137f41
  
 root@ip-172-31-22-94:/home/ubuntu# docker ps -a
@@ -290,11 +290,111 @@ d2e1216a180a        tomcat              "catalina.sh run"   9 minutes ago       
 ed73188099fa        ubuntu              "/bin/bash"         3 hours ago         Up About an hour                              laughing_moser
 ```
 
+### Delete image when container is up
+```
+root@ip-172-31-22-94:/home/ubuntu# docker rmi 2e
+Error response from daemon: conflict: unable to delete 2eb5a120304e (cannot be forced) - image is being used by running container 195cbc1e045e
 
+Trying to forcefully remove the images
 
+root@ip-172-31-22-94:/home/ubuntu# docker rmi -f 2e
+Error response from daemon: conflict: unable to delete 2eb5a120304e (cannot be forced) - image is being used by running container d2e1216a180a
 
+root@ip-172-31-22-94:/home/ubuntu# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+ubuntu              latest              74435f89ab78        2 weeks ago         73.9MB
+tomcat              latest              2eb5a120304e        3 weeks ago         647MB
 
+Stopping the container and removing the image
 
+root@ip-172-31-22-94:/home/ubuntu# docker container stop d2e1216a180a
+d2e1216a180a
+
+root@ip-172-31-22-94:/home/ubuntu# docker rmi -f 2e
+Error response from daemon: conflict: unable to delete 2eb5a120304e (cannot be forced) - image is being used by running container 195cbc1e045e
+ 
+root@ip-172-31-22-94:/home/ubuntu# docker stop 195cbc1e045e
+195cbc1e045e
+ 
+root@ip-172-31-22-94:/home/ubuntu# docker rmi -f 2e
+Untagged: tomcat:latest
+Untagged: tomcat@sha256:81c2a95e5b1b5867229d75255abe54928d505deb81c8ff8949b61fde1a5d30a1
+Deleted: sha256:2eb5a120304e4e7ab6c901e2ca3ed7ea50e57cd4756818f847b1eaa4d34c3881
+
+root@ip-172-31-22-94:/home/ubuntu# docker images -a
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+ubuntu              latest              74435f89ab78        2 weeks ago         73.9MB
+```
+
+### Stop all docker containers/images
+```
+root@ip-172-31-22-94:/home/ubuntu# docker ps -a -q
+daa184117390
+d2e1216a180a
+ed73188099fa
+
+root@ip-172-31-22-94:/home/ubuntu# docker stop $(docker ps -a -q)
+daa184117390
+d2e1216a180a
+ed73188099fa
+
+root@ip-172-31-22-94:/home/ubuntu# docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                       PORTS               NAMES
+daa184117390        ubuntu              "/bin/bash"         5 hours ago         Exited (0) 5 seconds ago                         dockerubuntu
+d2e1216a180a        2eb5a120304e        "catalina.sh run"   5 hours ago         Exited (143) 5 seconds ago                       tomcat
+ed73188099fa        ubuntu              "/bin/bash"         8 hours ago         Exited (0) 5 seconds ago                         laughing_moser
+
+root@ip-172-31-22-94:/home/ubuntu# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+ubuntu              latest              74435f89ab78        2 weeks ago         73.9MB
+redis               latest              235592615444        3 weeks ago         104MB
+
+root@ip-172-31-22-94:/home/ubuntu# docker rmi $(docker images -a -q)
+Untagged: ubuntu:latest
+Untagged: ubuntu@sha256:35c4a2c15539c6c1e4e5fa4e554dac323ad0107d8eb5c582d6ff386b383b7dce
+Deleted: sha256:74435f89ab7825e19cf8c92c7b5c5ebd73ae2d0a2be16f49b3fb81c9062ab303
+Deleted: sha256:8a8d1f0b34041a66f09e49bdc03e75c2190f606b0db7e08b75eb6747f7b49e11
+Deleted: sha256:f1b8f74eff975ae600be0345aaac8f0a3d16680c2531ffc72f77c5e17cbfeeee
+Deleted: sha256:27d46ebb54384edbc8c807984f9eb065321912422b0e6c49d6a9cd8c8b7d8ffc
+Deleted: sha256:e1c75a5e0bfa094c407e411eb6cc8a159ee8b060cbd0398f1693978b4af9af10
+Untagged: redis:latest
+Untagged: redis@sha256:800f2587bf3376cb01e6307afe599ddce9439deafbd4fb8562829da96085c9c5
+Deleted: sha256:2355926154447ec75b25666ff5df14d1ab54f8bb4abf731be2fcb818c7a7f145
+Deleted: sha256:852691351e76013456bccc5ca476ea5998cd4ef829ff88f36aa6152d26752a9f
+Deleted: sha256:5638adc92bc136b5d1fa65b5eb75163949c27f9fc372c575ad840b07a19889af
+Deleted: sha256:8e68e4829a31a04ca33cdab1c52f2e1dc34ff1eae8f858f87bdb97577e206230
+Deleted: sha256:68d6751877f41a67f7fde5abb4c89d3b695df08603299fbf3585d6d1ff09a0e4
+Deleted: sha256:7c2052306f31e2f3ba13c29dfff01ca66009d7d44917689662c6bc5ae1725e80
+Deleted: sha256:13cb14c2acd34e45446a50af25cb05095a17624678dbafbcc9e26086547c1d74
+
+root@ip-172-31-22-94:/home/ubuntu# docker images -a
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+```
+
+### Copy files from host-os to container
+```
+root@ip-172-31-22-94:/home/ubuntu# cat myfile.txt 
+sample file
+
+root@ip-172-31-22-94:/tmp# docker exec 693e088601b4 "cd /tmp && ls -ltr"^C
+
+root@ip-172-31-22-94:/tmp# docker exec -it 693e088601b4 /bin/bash
+root@693e088601b4:/# ls -ltr /tmp/
+total 4
+-rw-r--r-- 1 root root 12 Jul  5 14:18 myfile.txt
+```
+
+### copy from container to host-os
+```
+root@ip-172-31-22-94:/tmp# docker cp 693e088601b4:/tmp/myfile.txt .
+
+root@ip-172-31-22-94:/tmp# ls -ltr
+total 16
+drwx------ 3 root root 4096 Jul  5 05:12 systemd-private-f7c37cd241794c36aa9dcc6e54a97fb7-systemd-timesyncd.service-KKUrt0
+drwx------ 3 root root 4096 Jul  5 05:12 systemd-private-f7c37cd241794c36aa9dcc6e54a97fb7-systemd-resolved.service-VZmvbs
+drwx------ 2 root root 4096 Jul  5 05:17 tmpdiq0swnv
+-rw-r--r-- 1 root root   12 Jul  5 14:18 myfile.txt
+```
 
 
 
