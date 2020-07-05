@@ -411,6 +411,11 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 693e088601b4        ubuntu              "/bin/bash"         11 minutes ago      Up 11 minutes                           ubuntu1804
 
 NOTE: The docker container 33dd1f81d631 exited when using exit command and restarted again as we mentioned restart=always parameter.
+
+Restart allowed values:
+--restart=no         | Default value, don't restart the container after it's stopped
+--restart=always     | Always restart the container and don't care about the exit code
+--restart=on-failure | Restart the container if it fails with non-zero exit code
 ```
 
 ### Remove all stopped docker container
@@ -431,6 +436,40 @@ Total reclaimed space: 41B
 root@ip-172-31-22-94:/tmp# docker ps -a
 CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
 ```
+
+### Get docker container logs
+```
+root@ip-172-31-22-94:/tmp# docker logs 7742db81f1b0
+Using CATALINA_BASE:   /usr/local/tomcat
+Using CATALINA_HOME:   /usr/local/tomcat
+Using CATALINA_TMPDIR: /usr/local/tomcat/temp
+Using JRE_HOME:        /usr/local/openjdk-11
+Using CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar
+NOTE: Picked up JDK_JAVA_OPTIONS:  --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+....
+....
+
+root@ip-172-31-22-94:/tmp# docker logs --tail=2 7742db81f1b0
+05-Jul-2020 14:39:17.562 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+05-Jul-2020 14:39:17.600 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [201] milliseconds
+
+root@ip-172-31-22-94:/tmp# docker logs --follow 7742db81f1b0
+
+--follow to follow the logs
+```
+
+### Search a docker image
+```
+root@ip-172-31-22-94:/tmp# docker search tomcat
+NAME                          DESCRIPTION                                     STARS               OFFICIAL            AUTOMATED
+tomcat                        Apache Tomcat is an open source implementati…   2770                [OK]                
+tomee                         Apache TomEE is an all-Apache Java EE certif…   79                  [OK]                
+dordoka/tomcat                Ubuntu 14.04, Oracle JDK 8 and Tomcat 8 base…   54                                      [OK]
+bitnami/tomcat                Bitnami Tomcat Docker Image                     35                                      [OK]
+kubeguide/tomcat-app          Tomcat image for Chapter 1                      28                                      
+```
+
+
 
 
 
