@@ -469,7 +469,37 @@ bitnami/tomcat                Bitnami Tomcat Docker Image                     35
 kubeguide/tomcat-app          Tomcat image for Chapter 1                      28                                      
 ```
 
+### Commit custom image after changes
+```
+root@ip-172-31-22-94:/home/ubuntu# docker images -a
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+ubuntu              latest              74435f89ab78        2 weeks ago         73.9MB
 
+root@ip-172-31-22-94:/home/ubuntu# docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                NAMES
+6722b5f1ff6f        ubuntu              "/bin/bash"              4 hours ago         Up 4 hours                               gallant_murdock
+
+root@ip-172-31-22-94:/home/ubuntu# docker exec -it 67 bash
+
+root@6722b5f1ff6f:/# apt-get update -y
+
+root@6722b5f1ff6f:/# apt-get install nginx -y
+
+root@ip-172-31-22-94:/home/ubuntu# docker commit -m "custom nginx" -c 'CMD /usr/sbin/nginx -g "daemon off;" ' -c 'EXPOSE 80' 6722b5f1ff6f customnginx
+
+root@ip-172-31-22-94:/home/ubuntu# docker images -a
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+customnginx         latest              dc52ed60c93d        3 seconds ago       218MB
+ubuntu              latest              74435f89ab78        2 weeks ago         73.9MB
+
+root@ip-172-31-22-94:/home/ubuntu# docker run -itd -p 80:80 customnginx
+9d767d45f2d348717ecd6c300bd52d1ce846ea83c00582ea0e7b480c8623745a
+
+root@ip-172-31-22-94:/home/ubuntu# docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                NAMES
+9d767d45f2d3        customnginx         "/bin/sh -c '/usr/sb…"   4 seconds ago       Up 3 seconds        0.0.0.0:80->80/tcp   eager_bose
+6722b5f1ff6f        ubuntu              "/bin/bash"              4 hours ago         Up 4 hours                               gallant_murdock
+```
 
 
 
