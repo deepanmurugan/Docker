@@ -384,6 +384,26 @@ total 4
 -rw-r--r-- 1 root root 12 Jul  5 14:18 myfile.txt
 ```
 
+### Automatically remove docker container when it's stopped
+```
+root@ip-172-31-22-94:/home/ubuntu# docker run --rm -itd ubuntu
+35ec94a38b1398c59eda24edcecc7a93560007122f02d1ee9141c8c2620515fb
+ 
+root@ip-172-31-22-94:/home/ubuntu# docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                NAMES
+35ec94a38b13        ubuntu              "/bin/bash"              6 seconds ago       Up 4 seconds                             quizzical_liskov
+9d767d45f2d3        customnginx         "/bin/sh -c '/usr/sb…"   6 minutes ago       Up 6 minutes        0.0.0.0:80->80/tcp   eager_bose
+6722b5f1ff6f        ubuntu              "/bin/bash"              4 hours ago         Up 4 hours                               gallant_murdock
+
+root@ip-172-31-22-94:/home/ubuntu# docker stop 35ec94a38b13
+35ec94a38b13
+
+root@ip-172-31-22-94:/home/ubuntu# docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                NAMES
+9d767d45f2d3        customnginx         "/bin/sh -c '/usr/sb…"   6 minutes ago       Up 6 minutes        0.0.0.0:80->80/tcp   eager_bose
+6722b5f1ff6f        ubuntu              "/bin/bash"              4 hours ago         Up 4 hours                               gallant_murdock
+```
+
 ### copy from container to host-os
 ```
 root@ip-172-31-22-94:/tmp# docker cp 693e088601b4:/tmp/myfile.txt .
