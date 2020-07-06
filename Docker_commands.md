@@ -521,5 +521,29 @@ CONTAINER ID        IMAGE               COMMAND                  CREATED        
 6722b5f1ff6f        ubuntu              "/bin/bash"              4 hours ago         Up 4 hours                               gallant_murdock
 ```
 
+### Build image from docker file
+```
+root@ip-172-31-22-94:/home/ubuntu/dockerfiles# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+ubuntu              latest              74435f89ab78        2 weeks ago         73.9MB
 
+root@ip-172-31-22-94:/home/ubuntu/dockerfiles# cat dockerfile 
+FROM ubuntu:18.04
+
+RUN apt-get update -y
+RUN apt-get install nginx -y
+RUN rm /var/www/html/index*
+COPY index.html /var/www/html
+
+EXPOSE 80
+CMD /usr/sbin/nginx -g "daemon off;"
+
+root@ip-172-31-22-94:/home/ubuntu/dockerfiles# docker build -t ubuntu-nginx .
+
+root@ip-172-31-22-94:/home/ubuntu/dockerfiles# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+ubuntu-nginx        latest              97cdbc524379        15 seconds ago      153MB
+ubuntu              latest              74435f89ab78        2 weeks ago         73.9MB
+ubuntu              18.04               8e4ce0a6ce69        2 weeks ago         64.2MB
+```
 
