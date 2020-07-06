@@ -547,3 +547,19 @@ ubuntu              latest              74435f89ab78        2 weeks ago         
 ubuntu              18.04               8e4ce0a6ce69        2 weeks ago         64.2MB
 ```
 
+### Check image history
+```
+root@ip-172-31-22-94:/home/ubuntu/dockerfiles# docker history ubuntu-nginx
+IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT
+97cdbc524379        8 minutes ago       /bin/sh -c #(nop)  CMD ["/bin/sh" "-c" "/usr…   0B                  
+edf535435fce        8 minutes ago       /bin/sh -c #(nop)  EXPOSE 80                    0B                  
+aff321c5566c        8 minutes ago       /bin/sh -c #(nop) COPY file:372a886dc338c388…   620B                
+e3dfa4883093        8 minutes ago       /bin/sh -c rm /var/www/html/index*              0B                  
+c32b10781415        8 minutes ago       /bin/sh -c apt-get install nginx -y             60.3MB              
+a2a07c86637d        8 minutes ago       /bin/sh -c apt-get update -y                    28.9MB              
+8e4ce0a6ce69        2 weeks ago         /bin/sh -c #(nop)  CMD ["/bin/bash"]            0B                  
+<missing>           2 weeks ago         /bin/sh -c mkdir -p /run/systemd && echo 'do…   7B                  
+<missing>           2 weeks ago         /bin/sh -c set -xe   && echo '#!/bin/sh' > /…   745B                
+<missing>           2 weeks ago         /bin/sh -c [ -z "$(apt-get indextargets)" ]     987kB               
+<missing>           2 weeks ago         /bin/sh -c #(nop) ADD file:1e8d02626176dc814…   63.2MB       
+```
