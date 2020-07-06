@@ -563,3 +563,60 @@ a2a07c86637d        8 minutes ago       /bin/sh -c apt-get update -y            
 <missing>           2 weeks ago         /bin/sh -c [ -z "$(apt-get indextargets)" ]     987kB               
 <missing>           2 weeks ago         /bin/sh -c #(nop) ADD file:1e8d02626176dc814…   63.2MB       
 ```
+
+### Login to docker hub
+```
+docker login
+```
+
+### Push docker images to docker hub
+```
+root@ip-172-31-22-94:/home/ubuntu# docker tag ubuntu-nginx:latest deepanmurugan/cloudrepo:nginx-v1.0.0
+
+root@ip-172-31-22-94:/home/ubuntu# docker images
+REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+deepanmurugan/cloudrepo   nginx-v1.0.0        97cdbc524379        53 minutes ago      153MB
+ubuntu-nginx              latest              97cdbc524379        53 minutes ago      153MB
+ubuntu                    latest              74435f89ab78        2 weeks ago         73.9MB
+ubuntu                    18.04               8e4ce0a6ce69        2 weeks ago         64.2MB
+
+root@ip-172-31-22-94:/home/ubuntu# docker push deepanmurugan/cloudrepo:nginx-v1.0.0
+The push refers to repository [docker.io/deepanmurugan/cloudrepo]
+bad0de65784d: Pushed 
+19adfc54695f: Pushed 
+a2786e07fe53: Pushed 
+abd92d1b5326: Pushed 
+ddc500d84994: Mounted from library/ubuntu 
+c64c52ea2c16: Mounted from library/ubuntu 
+5930c9e5703f: Mounted from library/ubuntu 
+b187ff70b2e4: Mounted from library/ubuntu 
+nginx-v1.0.0: digest: sha256:30d20db8432c119f809999a51a12fed6a942b1187b39a5009d66defe1f56bd57 size: 1990
+```
+
+### Pull image from docker hub
+```
+root@ip-172-31-22-94:/home/ubuntu# docker pull deepanmurugan/cloudrepo:nginx-v1.0.0
+```
+
+### Save docker image as a file
+```
+root@ip-172-31-22-94:/home/ubuntu# docker save -o nginx.tgz deepanmurugan/cloudrepo:nginx-v1.0.0
+
+root@ip-172-31-22-94:/home/ubuntu# ls -ltr
+total 152884
+drwxr-xr-x 2 root root      4096 Jul  6 09:55 dockerfiles
+-rw------- 1 root root 156544000 Jul  6 10:57 nginx.tgz
+```
+
+### Launch docker image from a file
+```
+root@ip-172-31-22-94:/home/ubuntu# docker load < nginx.tgz
+Loaded image: deepanmurugan/cloudrepo:nginx-v1.0.0
+
+root@ip-172-31-22-94:/home/ubuntu# docker images
+REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+deepanmurugan/cloudrepo   nginx-v1.0.0        97cdbc524379        59 minutes ago      153MB
+ubuntu-nginx              latest              97cdbc524379        59 minutes ago      153MB
+ubuntu                    latest              74435f89ab78        2 weeks ago         73.9MB
+ubuntu                    18.04               8e4ce0a6ce69        2 weeks ago         64.2MB
+```
