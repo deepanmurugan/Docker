@@ -655,3 +655,35 @@ ID                            HOSTNAME            STATUS              AVAILABILI
 qzhlpz7t87sv0nnwftlr8jnd0 *   ip-172-31-22-94     Ready               Active              Leader              19.03.12
 owmokrogcrbez3pejqu2v2c3d     ip-172-31-42-199    Ready               Active                                  19.03.12
 ```
+
+### Set availability to drain to avoid bringing containers on master node
+```
+root@ip-172-31-22-94:/home/ubuntu# docker node update --availability drain ip-172-31-22-94
+ip-172-31-22-94
+
+root@ip-172-31-22-94:/home/ubuntu# docker inspect ip-172-31-22-94| grep -i availability
+            "Availability": "drain"
+```
+
+### Bring docker containers on swarm cluster
+```
+root@ip-172-31-22-94:/home/ubuntu# docker service create --name mytomcat --replicas 4 -p 8080:8080 tomcat
+ucwoswkao4umpns4v9l84cl9b
+overall progress: 4 out of 4 tasks 
+1/4: running   [==================================================>] 
+2/4: running   [==================================================>] 
+3/4: running   [==================================================>] 
+4/4: running   [==================================================>] 
+verify: Service converged 
+
+root@ip-172-31-22-94:/home/ubuntu# docker service ls
+ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
+ucwoswkao4um        mytomcat            replicated          4/4                 tomcat:latest       *:8080->8080/tcp
+
+root@ip-172-31-22-94:/home/ubuntu# docker service ps mytomcat
+ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE            ERROR               PORTS
+fjvyt4xkjqw5        mytomcat.1          tomcat:latest       ip-172-31-38-149    Running             Running 51 seconds ago                       
+pamb7fxchoop        mytomcat.2          tomcat:latest       ip-172-31-38-149    Running             Running 53 seconds ago                       
+eg0mx9kjp1an        mytomcat.3          tomcat:latest       ip-172-31-42-199    Running             Running 53 seconds ago                       
+vrjzld0hcs1l        mytomcat.4          tomcat:latest       ip-172-31-42-199    Running             Running 51 seconds ago               
+```
