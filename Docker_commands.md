@@ -620,3 +620,38 @@ ubuntu-nginx              latest              97cdbc524379        59 minutes ago
 ubuntu                    latest              74435f89ab78        2 weeks ago         73.9MB
 ubuntu                    18.04               8e4ce0a6ce69        2 weeks ago         64.2MB
 ```
+
+### Docker compose
+```
+```
+
+### Init docker swarm
+```
+root@ip-172-31-22-94:/home/ubuntu# docker swarm init
+Swarm initialized: current node (qzhlpz7t87sv0nnwftlr8jnd0) is now a manager.
+
+root@ip-172-31-22-94:/home/ubuntu# docker node ls
+ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+qzhlpz7t87sv0nnwftlr8jnd0 *   ip-172-31-22-94     Ready               Active              Leader              19.03.12
+
+root@ip-172-31-22-94:/home/ubuntu# docker info | grep -i swarm
+ Swarm: active
+```
+
+### Join another instance as swarm master
+```
+root@ip-172-31-22-94:/home/ubuntu# docker swarm join-token manager
+To add a manager to this swarm, run the following command:
+    docker swarm join --token SWMTKN-1-1ujvxgit4tqaekjglreccwyczewfpb4apke37fz8rrg00pr48f-apurvfe44k17oroy2s1823ht5 172.31.22.94:2377
+```
+
+### Join another instance as swarm node
+```
+root@ip-172-31-42-199:/home/ubuntu# docker swarm join --token SWMTKN-1-1ujvxgit4tqaekjglreccwyczewfpb4apke37fz8rrg00pr48f-caet6hug5lih4zw6kpfjgaxh5 172.31.22.94:2377
+This node joined a swarm as a worker.
+
+root@ip-172-31-22-94:/home/ubuntu# docker node ls
+ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+qzhlpz7t87sv0nnwftlr8jnd0 *   ip-172-31-22-94     Ready               Active              Leader              19.03.12
+owmokrogcrbez3pejqu2v2c3d     ip-172-31-42-199    Ready               Active                                  19.03.12
+```
