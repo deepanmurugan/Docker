@@ -687,3 +687,22 @@ pamb7fxchoop        mytomcat.2          tomcat:latest       ip-172-31-38-149    
 eg0mx9kjp1an        mytomcat.3          tomcat:latest       ip-172-31-42-199    Running             Running 53 seconds ago                       
 vrjzld0hcs1l        mytomcat.4          tomcat:latest       ip-172-31-42-199    Running             Running 51 seconds ago               
 ```
+
+### Docker swarm with volume and port mapping
+```
+root@ip-172-31-22-94:/var/lib/docker/volumes# docker service create --name customnginx --replicas 4 -p 80:80 --mount source=html,target=/var/www/html deepanmurugan/cloudrepo:nginx-v1.0.0
+kd47q4wkc0d2ycfpvpgxofys3
+overall progress: 4 out of 4 tasks 
+1/4: running   [==================================================>] 
+2/4: running   [==================================================>] 
+3/4: running   [==================================================>] 
+4/4: running   [==================================================>] 
+verify: Service converged 
+
+root@ip-172-31-22-94:/var/lib/docker# docker service ps customnginx
+ID                  NAME                IMAGE                                  NODE                DESIRED STATE       CURRENT STATE           ERROR               PORTS
+uy8b4i34auqa        customnginx.1       deepanmurugan/cloudrepo:nginx-v1.0.0   ip-172-31-42-199    Running             Running 4 minutes ago                       
+87j4ogey86f7        customnginx.2       deepanmurugan/cloudrepo:nginx-v1.0.0   ip-172-31-38-149    Running             Running 4 minutes ago                       
+e4izxq1qi84g        customnginx.3       deepanmurugan/cloudrepo:nginx-v1.0.0   ip-172-31-42-199    Running             Running 4 minutes ago                       
+68l5ir718nx9        customnginx.4       deepanmurugan/cloudrepo:nginx-v1.0.0   ip-172-31-38-149    Running             Running 4 minutes ago                       
+```
